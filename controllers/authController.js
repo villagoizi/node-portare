@@ -1,4 +1,5 @@
 const passport = require('passport');
+const Vacantes = require('../models/Vacantes');
 
 exports.authUsuario = passport.authenticate('local',{
     successRedirect: '/admin',
@@ -14,11 +15,15 @@ exports.verificarUsuario = (req,res,next)=> {
     res.redirect('/iniciar-sesion');
 }
 
-exports.panelDeAdmin = (req,res,next) => {
+exports.panelDeAdmin = async (req,res,next) => {
+    const vacantes = await Vacantes.find({autor: req.user._id}).lean();
+
+    console.log(vacantes);
+
     res.render('administracion',{
         titlePage: 'Panel de administracion',
         tagline: 'Crea y administra tus vacantes',
-
+        vacantes
     }
     )
 }

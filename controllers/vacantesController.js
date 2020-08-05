@@ -10,9 +10,11 @@ exports.crearVacante = (req,res,next) => {
 }
 
 exports.crearVacanteAction = async (req,res,next) => {
-    console.log(req.body);
     const vacante = new Vacante(req.body);
     vacante.skills = req.body.skills.split(',');
+
+    //Author vacant
+    vacante.autor = req.user._id;
     
     try {
         const newVacant = await vacante.save();
@@ -20,6 +22,7 @@ exports.crearVacanteAction = async (req,res,next) => {
     } catch (error) {
         console.log(error);
     }
+    
 }
 
 exports.verVacanteUrl = async(req,res,next) => {
@@ -37,6 +40,7 @@ exports.editarVacanteUrl = async (req,res,next) => {
     const vacante = await Vacante.findOne({url: req.params.url}).lean();
     if(!vacante) return next()
 
+    console.log(vacante, req.user);
     res.render('editar-vacante',{
         titlePage: `Editar- ${vacante.titulo}`,
         barra:true,

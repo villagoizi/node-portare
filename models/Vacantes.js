@@ -39,7 +39,11 @@ const vacanteSchema = new Schema({
         nombre: String,
         email: String,
         curriculum: String
-    }]
+    }],
+    autor: {
+        type: Schema.ObjectId,
+        ref: 'Usuarios'
+    }
 })
 
 vacanteSchema.pre('save', function(next){
