@@ -10,7 +10,8 @@ const vacanteSchema = new Schema({
     },
     empresa: {
         type: String,
-        trim: true
+        trim: true,
+        default: 'Anonimo'
     },
     ubicacion: {
         type: String,
@@ -43,6 +44,13 @@ const vacanteSchema = new Schema({
     autor: {
         type: Schema.ObjectId,
         ref: 'Usuarios'
+    }
+},{
+    toObject: {
+        virtuals: true
+    },
+    toJSON: {
+        virtuals: true
     }
 })
 

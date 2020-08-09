@@ -1,5 +1,9 @@
 const passport = require('passport');
 const Vacantes = require('../models/Vacantes');
+const {
+    mongooseToObj,
+    multipleMongooseToObj
+} = require('../services/mongooseObject');
 
 exports.authUsuario = passport.authenticate('local',{
     successRedirect: '/admin',
@@ -16,14 +20,21 @@ exports.verificarUsuario = (req,res,next)=> {
 }
 
 exports.panelDeAdmin = async (req,res,next) => {
-    const vacantes = await Vacantes.find({autor: req.user._id}).lean();
+    const vacantes = multipleMongooseToObj(await Vacantes.find({autor: req.user._id}));
 
-    console.log(vacantes);
 
     res.render('administracion',{
         titlePage: 'Panel de administracion',
         tagline: 'Crea y administra tus vacantes',
+        nombre: req.user.nombre,
+        cerrarSesion: true,
         vacantes
     }
     )
+}
+
+exports.cerrarSesion = (req,res) => {
+    req.logout();
+    req.flash('correct', 'Sesion cerrada');
+    res.redirect('/iniciar-sesion');
 }

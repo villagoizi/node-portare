@@ -1,0 +1,24 @@
+<main class="contenedor">
+    <form action="/editar-perfil" method="POST" class="default-form" enctype='multipart/form-data'>
+
+        <div class="campo">
+            <label for="">Nombre</label>
+            <input type="text" value="{{user.nombre}}" name="nombre" placeholder="Tu nombre">
+        </div>
+        <div class="campo">
+            <label for="">Email</label>
+            <input type="text" value="{{user.email}}" name="email" placeholder="Tu Email">
+        </div>
+        <div class="campo">
+            <label for="">Cambiar password</label>
+            <input type="password" name="password" placeholder="Cambiar password">
+        </div>
+        <div class="campo">
+            <label>Perfil</label>
+            <input type="file" name="perfil" placeholder="Tu imagen de perfil" >
+        </div>
+        <div class="campo">
+            <input type="submit" value="Guardar" class="btn btn-azul">
+        </div>
+    </form>
+</main>

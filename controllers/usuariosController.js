@@ -1,6 +1,22 @@
 const mongoose = require('mongoose');
 const Usuarios = mongoose.model('Usuarios');
 const { body, validationResult } = require('express-validator');
+const {mongooseToObj} = require('../services/mongooseObject');
+const multer = require('multer');
+const { upload } = require('../middlewares/multer');
+
+
+exports.subirImagen = (req,res,next) => {
+
+    upload(req,res,function(err){
+        if( err instanceof multer.MulterError) {
+            return next()
+        }
+
+        next();
+    });   
+
+}
 
 exports.crearCuenta = (req,res,next) => {
     res.render('crear-cuenta', {
@@ -33,6 +49,18 @@ exports.validarRegistro = [
                 return value;
             }
         }),      
+]
+
+exports.validarEditar = [
+    body('nombre').escape(),
+    body('email').escape(),
+    body('password').escape(),
+    body('nombre')
+        .notEmpty()
+        .withMessage('El campo nombre no puede ir vacio'),
+    body('email')
+        .notEmpty()
+        .withMessage('El campo email no puede ir vacio')
 ]
 
 
@@ -85,3 +113,52 @@ exports.iniciarSesion = (req,res,next) => {
 exports.iniciarSesionAction = (req,res,next) => {
     console.log(req.body); 
 }
+
+exports.editarPerfil = async (req,res) => {
+    const user = mongooseToObj( await Usuarios.findById(req.user._id));
+    res.render('editar-perfil',{
+        titlePage: 'Edita tu perfil en devJobs',
+        nombre: req.user.nombre,
+        cerrarSesion: true,
+        user
+    })
+}
+exports.editarPerfilAction = async (req,res) => {
+    /*
+    const logs = validationResult(req);
+
+    if(!logs.isEmpty()){
+        req.flash('error', logs.errors.map( err => err.msg));
+        res.render('editar-perfil',{
+            titlePage: 'Edita tu perfil en devJobs',
+            nombre: req.user.nombre,
+            cerrarSesion: true,
+            user: mongooseToObj(req.user),
+            mensajes: req.flash()
+        })
+        return;
+    }
+    */
+
+    try {
+        const user = await Usuarios.findById(req.user._id);
+        user.nombre = req.body.nombre;
+        user.email = req.body.email;
+        if(req.body.password){
+            user.password = req.body.password;
+        }
+
+        if(req.file){
+            user.imagen = req.file.path;
+        }
+
+        await user.save();
+        req.flash('correcto', 'Cambios guardados');
+        res.redirect('/admin');
+    } catch (error) {
+        console.log(error);
+    }
+
+
+}
+

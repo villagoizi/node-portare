@@ -6,7 +6,9 @@ const {
     crearVacanteAction,
     verVacanteUrl,
     editarVacanteUrl,
-    editarVacanteUrlAction
+    editarVacanteUrlAction,
+    eliminarVacante,
+    validarVacantes
 } = require('../controllers/vacantesController');
 
 const { 
@@ -14,23 +16,30 @@ const {
     validarRegistro,
     crearCuentaAction,
     iniciarSesion,
+    editarPerfil,
+    editarPerfilAction,
+    validarEditar,
+    subirImagen,
     iniciarSesionAction 
  } = require('../controllers/usuariosController');
 
  const { 
      authUsuario,
      panelDeAdmin, 
-     verificarUsuario
+     verificarUsuario,
+     cerrarSesion
     } = require('../controllers/authController');
 
 router.get('/', Home);
-router.get('/vacantes/nueva',verificarUsuario, crearVacante);
-router.post('/vacantes/nueva',verificarUsuario, crearVacanteAction);
+router.get('/vacantes/nueva',verificarUsuario, crearVacante);    
+router.post('/vacantes/nueva',verificarUsuario, validarVacantes, crearVacanteAction);
 
 router.get('/vacantes/:url', verVacanteUrl);
 
 router.get('/vacantes/editar/:url',verificarUsuario, editarVacanteUrl);
-router.post('/vacantes/editar/:url',verificarUsuario, editarVacanteUrlAction);
+router.post('/vacantes/editar/:url',verificarUsuario, validarVacantes, editarVacanteUrlAction);
+
+router.delete('/vacantes/eliminar/:id', verificarUsuario, eliminarVacante);
 
 router.get('/crear-cuenta', crearCuenta);
 router.post('/crear-cuenta', validarRegistro, crearCuentaAction);
@@ -38,6 +47,13 @@ router.post('/crear-cuenta', validarRegistro, crearCuentaAction);
 router.get('/iniciar-sesion', iniciarSesion);
 router.post('/iniciar-sesion',authUsuario)//,(req,res) =>{console.log(req.user);res.redirect('/')});
 
+router.get('/cerrar-sesion', verificarUsuario, cerrarSesion)
 //Panel admin
 router.get('/admin',verificarUsuario, panelDeAdmin);
+
+//Editar perfil
+router.get('/editar-perfil',verificarUsuario, editarPerfil );
+router.post('/editar-perfil', verificarUsuario, //validarEditar,
+subirImagen,
+ editarPerfilAction);
 module.exports = router;

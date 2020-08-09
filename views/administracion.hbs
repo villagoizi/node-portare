@@ -5,26 +5,29 @@
         <a href="/vacantes/nueva" class="btn btn-azul">Nueva vacante</a>
     </div>
     <h2>Lista de vacantes publicadas</h2>
-    {{#if vacantes.length}}
+    <div class="panel-administracion">
+        {{#if vacantes.length}}
+            {{#each vacantes}}
+                <div class="vacante">
+                    <div class="caja">
+                        <h3>{{empresa}}</h3>
+                        <p class="puesto">{{titulo}}</p>
+                    </div>
 
-        {{#each vacantes}}
-            <div class="vacante panel-administracion">
-                <div class="caja">
-                    <h3>{{empresa}}</h3>
-                    <p class="puesto">{{titulo}}</p>
-                </div>
-                <div class="caja centrar-vertical">
-                    <a href="/candidatos/{{id}}" class="btn btn-amarillo">Ver candidatos</a>
-                </div>
-                <div class="caja centrar-vertical">
-                    <a href="/vacantes/editar/{{url}}" class="btn btn-verde">Editar vacante</a>
-                </div>
-                <div class="caja centrar-vertical">
-                    <a  class="btn btn-rojo" href="#" data-eliminar={{id}}>Eliminar</a>
-                </div>
-            </div> <!-- Vacante -->
-        {{/each}}
-    {{else}}
-    <p>No publicó ninguna vacante aún</p>
-    {{/if}}
+                    <div class="caja centrar-vertical">
+                        <a href="/candidatos/{{id}}" class="btn btn-amarillo">Ver candidatos</a>
+                    </div>
+                    <div class="caja centrar-vertical">
+                        <a href="/vacantes/editar/{{url}}" class="btn btn-verde">Editar vacante</a>
+                    </div>
+                    <div class="caja centrar-vertical">
+                        <a  id="eliminar-vacante"class="btn btn-rojo" href="#" data-eliminar={{id}}>Eliminar</a>
+                    </div>
+
+                </div> <!-- Vacante -->
+            {{/each}}
+            {{else}}
+                <p>No publicó ninguna vacante aún</p>
+            {{/if}}
+        </div>
 </main>

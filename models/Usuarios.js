@@ -18,7 +18,11 @@ const userSchema = new Schema({
         trim:true
     },
     tokenPass: String,
-    expPass: Date
+    expPass: Date,
+    image: String
+},{
+    toObject:{ virtuals: true},
+    toJson: { virtuals:true}
 });
 
 userSchema.pre('save', async function(next){

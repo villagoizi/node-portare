@@ -11,9 +11,8 @@ const { PORT } = require('./config/env');
 
 //Setting app
 config(app);
-
 //Routes
-app.use('/', routes);
+app.use(routes);
 
 
 app.listen(PORT, ()=>{ console.log("Server on port 5000")});

@@ -1,7 +1,8 @@
 const Vacante  = require('../models/Vacantes');
+const { multipleMongooseToObj } = require('../services/mongooseObject');
 
 exports.Home = async (req,res,next) =>{
-    const vacantes = await Vacante.find().lean();
+    const vacantes = multipleMongooseToObj( await Vacante.find() );
     if(!vacantes) return next()
     res.render('home',{
         titlePage: 'Portare',
